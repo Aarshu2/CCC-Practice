@@ -31,15 +31,14 @@ int main() {
 
     int final = 0;
     for (int i = 0; i < numbers.size(); i += 2) {
-        int a = numbers[i] - '0';           // Convert char to integer
-        int r = m1[numbers[i + 1]];          // Roman numeral base value
+        int a = numbers[i] - '0'; 
+        int r = m1[numbers[i + 1]];           
         int pair_value = a * r;
 
-        // Check if the next Roman numeral has a higher base value
         if (i + 3 < numbers.size() && m1[numbers[i + 3]] > r) {
-            final -= pair_value;             // Subtract if next Roman numeral is greater
+            final -= pair_value;             
         } else {
-            final += pair_value;             // Otherwise, add
+            final += pair_value;            
         }
     }
 
