@@ -14,53 +14,41 @@
 #include <set>
 #include <cmath>
 #include <queue>
-
+#include <bits/stdc++.h>
 using namespace std;
 
 int main() {
-    int startR, startC, endR, endC;
-    cin >> startR >> startC >> endR >> endC;
-    startR--; startC--; // Converting to 0-based index for easier handling
-    endR--; endC--;
+    pair<int,int> moves[8] = {{2, 1}, {1, 2}, {-1, 2}, {-2, 1}, {-2, -1}, {-1, -2}, {1, -2}, {2, -1}};
+    bool vis[10][10] = {false};
+    int dist[10][10] = {0}; 
 
-    queue<pair<int, int>> q;
-    q.push({startR, startC});
-    
-    vector<vector<bool>> vis(8, vector<bool>(8, false));
+    int startR, startC, endR, endC; 
+    cin >> startR >> startC;
+    cin >> endR >> endC;
+
+    queue<pair<int, int>> bfs;
+    bfs.push({startR, startC});
     vis[startR][startC] = true;
 
-    int moves = 0;
-    bool found = false;
-
-    vector<vector<int>> dirs = {{2, 1}, {1, 2}, {2, -1}, {1, -2}, {-1, -2}, {-2, -1}, {-2, 1}, {-1, 2}};
-
-    while(!q.empty() && !found) {
-        int size = q.size(); // Number of nodes at current BFS level
-        
-        for (int i = 0; i < size; i++) {
-            int r = q.front().first;
-            int c = q.front().second;
-            q.pop();
-            
-            if(r == endR && c == endC) { // If we reach the target position
-                found = true;
-                break;
-            }
-            
-            for (auto dir : dirs) {
-                int row = r + dir[0];
-                int col = c + dir[1];
-                
-                if (row >= 0 && row < 8 && col >= 0 && col < 8 && !vis[row][col]) {
-                    vis[row][col] = true;
-                    q.push({row, col});
+    while(!bfs.empty()) {
+        auto cur = bfs.front(); bfs.pop();
+        if(cur.first == endR and cur.second == endC) {
+            cout << dist[endR][endC] << endl;
+            break;
+        } else {
+            for(auto &dir : moves) {
+                int r = cur.first + dir.first;
+                int c = cur.second + dir.second;
+                if(r < 1 || r > 8 || c < 1 || c > 8 || vis[r][c]) {
+                    continue;
                 }
+                dist[r][c] = dist[cur.first][cur.second] + 1;
+                vis[r][c] = true;
+                bfs.push({r, c});
             }
         }
-        
-        if (!found) moves++; // Increment move count after finishing each BFS level
     }
 
-    cout << moves << endl;
+
     return 0;
 }
